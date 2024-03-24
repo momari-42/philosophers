@@ -1,13 +1,14 @@
-CFLALGS = -Wall -Wextra -Werror -pthread 
-NAME = philo
+CFLALGS = -Wall -Wextra -Werror
+#  -fsanitize=thread 
+NAME = philo_bonus
 CC = cc
-SRC = philosophers.c src/ft_atoi.c
+SRC = philosophers_bonus.c src/ft_atoi.c
 
 OBJS = $(SRC:.c=.o)
 
 all: $(NAME)
 
-%.o: %.c philosophers.h
+%.o: %.c philosophers_bonus.h
 	$(CC) $(CFLALGS) -c $< -o $@
 
 $(NAME): $(OBJS)

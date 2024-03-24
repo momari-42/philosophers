@@ -1,37 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers.h                                     :+:      :+:    :+:   */
+/*   philosophers_bonus.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: momari <momari@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/27 08:57:28 by momari            #+#    #+#             */
-/*   Updated: 2024/03/21 01:59:29 by momari           ###   ########.fr       */
+/*   Created: 2024/03/15 01:31:11 by momari            #+#    #+#             */
+/*   Updated: 2024/03/23 23:14:40 by momari           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PHILOSOPHERS_H
-#define PHILOSOPHERS_H
+#ifndef PhiLOSOPHERS_BONUS_H
+#define PhiLOSOPHERS_BONUS_H
 
+#include <semaphore.h>
+#include <sys/wait.h> // For wait
 #include <stdlib.h>
 #include <unistd.h>
 #include <limits.h>
 #include <pthread.h>
 #include <stdio.h>
 #include <sys/time.h>
+#include <signal.h>
 #define TRUE 1
 
 typedef struct s_philosophers
 {
     pthread_t       philo;
+    pthread_t       patrol;
     int             philo_id;
     int             *flag;
     int             nop;
-    pthread_mutex_t *right_chopstick;
-    pthread_mutex_t *left_chopstick;
-    pthread_mutex_t *mutex_last_meal;
-    pthread_mutex_t *mutex_printing;
-    pthread_mutex_t *check_dead;
+    sem_t           *sem_chopstick;
+    sem_t           *sem_last_meal;
+    sem_t           *sem_printing;
+    sem_t           *sem_check_dead;
+    sem_t           *sem_check_time;
     size_t          start_date;
     size_t          last_meal;
     size_t          start_meal;
@@ -39,14 +43,16 @@ typedef struct s_philosophers
     size_t          time_to_eat;
     size_t          time_to_sleep;
     int             number_of_repeat;
+    int             pid;
 } t_philos;
 
 typedef struct s_data
 {
-    pthread_mutex_t *chopsticks;
-    pthread_mutex_t mutex_last_meal;
-    pthread_mutex_t mutex_printing;
-    pthread_mutex_t check_dead;
+    sem_t           *sem_chopsticks;
+    sem_t           *sem_last_meal;
+    sem_t           *sem_printing;
+    sem_t           *sem_dead;
+    sem_t           *sem_time;
     int             nophilo;
     t_philos        *philos;
     size_t          time_to_die;
@@ -54,8 +60,7 @@ typedef struct s_data
 
 
 long	ft_atoi(const char *str);
-void	ft_lstadd_back(t_data **lst, t_data *new);
-t_data	*ft_lstnew(int index, int ttd, int tte, int tts);
+
 
 
 #endif
